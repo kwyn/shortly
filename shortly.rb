@@ -57,13 +57,21 @@ get '/' do
     erb :index
 end
 
+# fetch() behavior
 get '/links' do
-    links = Link.order("created_at DESC")
+    links = if params[:query]
+      puts params[:query]
+      Link.order("created_at desc")
+    else
+      Link.order("visits DESC")
+    end
     links.map { |link|
         link.as_json.merge(base_url: request.base_url)
     }.to_json
 end
 
+
+# link.save() behavior
 post '/links' do
     data = JSON.parse request.body.read
     uri = URI(data['url'])

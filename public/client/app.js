@@ -8,12 +8,14 @@ window.Shortly = Backbone.View.extend({
         <li><a href="#" class="create">Shorten</a></li> \
       </ul> \
       </div> \
+      <div class="search"></div> \
       <div id="container"></div>'
   ),
 
   events: {
     "click li a.index":  "renderIndexView",
     "click li a.create": "renderCreateView"
+    // "click li a.search": "renderSearchView"
   },
 
   initialize: function(){
@@ -32,6 +34,8 @@ window.Shortly = Backbone.View.extend({
     var links = new Shortly.Links();
     var linksView = new Shortly.LinksView( {collection: links} );
     this.$el.find('#container').html( linksView.render().el );
+    var searchView = new Shortly.SearchView( {collection: links });
+    this.$el.find('.search').html( searchView.render().el );
     this.updateNav('index');
   },
 
@@ -41,7 +45,6 @@ window.Shortly = Backbone.View.extend({
     this.$el.find('#container').html( linkCreateView.render().el );
     this.updateNav('create');
   },
-
   updateNav: function(className){
     this.$el.find('.navigation li a')
             .removeClass('selected')
