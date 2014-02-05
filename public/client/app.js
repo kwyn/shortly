@@ -35,6 +35,7 @@ window.Shortly = Backbone.View.extend({
     var linksView = new Shortly.LinksView( {collection: links} );
     this.$el.find('#container').html( linksView.render().el );
     var searchView = new Shortly.SearchView( {collection: links });
+    $('.search').show();
     this.$el.find('.search').html( searchView.render().el );
     this.updateNav('index');
   },
@@ -42,6 +43,7 @@ window.Shortly = Backbone.View.extend({
   renderCreateView: function(e){
     e && e.preventDefault();
     var linkCreateView = new Shortly.LinkCreateView();
+    $(".search").hide();
     this.$el.find('#container').html( linkCreateView.render().el );
     this.updateNav('create');
   },

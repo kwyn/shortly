@@ -61,7 +61,7 @@ end
 get '/links' do
     links = if params[:query]
       puts params[:query]
-      Link.order("created_at desc")
+      Link.where("url like ?", "%#{params[:query]}%")
     else
       Link.order("visits DESC")
     end
