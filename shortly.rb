@@ -89,9 +89,27 @@ get '/signup' do
 end
 
 get '/login' do
-  erb :login
+  if params[:errors]
+    @error = params[:errors]
+    erb :login
+  else
+    erb :login
+  end
 end
 
+post '/login' do
+  user = User.find_by_email(params[:email])
+  salt = user.password_salt
+  check_hash = BCrypt::Engine.hash_secret(params[:password], salt)
+  if (check_hash === user.password_hash)
+    user.auth_token = SecureRandom.hex
+    response.set_cookie(user.email, user.auth_token)
+    redirect "/"
+  else
+    error = "The password and username do not match."
+    redirect "/login?errors=#{error}"
+  end
+end
 
 post '/users' do
   password_salt = BCrypt::Engine.generate_salt
