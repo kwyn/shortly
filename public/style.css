@@ -145,3 +145,7 @@ img.spinner {
 input[type='submit'] {
   height: 2em;
 }
+
+.emailError {
+  color: red;
+}

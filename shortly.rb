@@ -5,6 +5,8 @@ require 'digest/sha1'
 require 'pry'
 require 'uri'
 require 'open-uri'
+require 'bcrypt'
+require 'SecureRandom'
 # require 'nokogiri'
 
 ###########################################################
@@ -49,12 +51,17 @@ class Click < ActiveRecord::Base
     belongs_to :link, counter_cache: :visits
 end
 
+
+class User < ActiveRecord::Base
+  validates :email, :presence => true, :uniqueness => true
+end
+
 ###########################################################
 # Routes
 ###########################################################
 
 get '/' do
-    erb :index
+  erb :index
 end
 
 # fetch() behavior
@@ -72,6 +79,30 @@ get '/links' do
     }.to_json
 end
 
+get '/signup' do
+  if params[:errors]
+    @error = params[:errors]
+    erb :signup
+  else
+    erb :signup
+  end
+end
+
+get '/login' do
+  erb :login
+end
+
+
+post '/users' do
+  password_salt = BCrypt::Engine.generate_salt
+  password_hash = BCrypt::Engine.hash_secret(params[:password], password_salt)
+  @user = User.new({email: params[:email], password_salt: password_salt, password_hash: password_hash, auth_token: SecureRandom.hex})
+  if @user.save
+    redirect "/"
+  else
+    redirect "/signup?errors=#{@user.errors.full_messages.last}"
+  end
+end
 
 # link.save() behavior
 post '/links' do
