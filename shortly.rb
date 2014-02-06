@@ -80,7 +80,7 @@ post '/links' do
     raise Sinatra::NotFound unless uri.absolute?
     link = Link.find_by_url(uri.to_s) ||
            Link.create( url: uri.to_s, title: get_url_title(uri) )
-    link.as_json.merge(base_url: request.base_url).to_json
+    link.as_json.merge(base_url: request.base_url, updated_time: link.updated_at.strftime("%b %d, %Y %I:%M %p")).to_json
 end
 
 get '/:url' do

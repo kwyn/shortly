@@ -127,7 +127,7 @@ form input[type=text] {
   height: 80px;
 }
 
-.creator img.spinner {
+img.spinner {
   height: 46px;
   margin-bottom: 5px;
   padding: 10px;
@@ -136,4 +136,12 @@ form input[type=text] {
 
 .creator .message {
   clear: both;
+}
+
+#shorten {
+  display: none;
+}
+
+input[type='submit'] {
+  height: 2em;
 }
