@@ -61,7 +61,14 @@ end
 ###########################################################
 
 get '/' do
-  erb :index
+
+  token = request.cookies["shortly"]
+  if User.find_by_auth_token(token)
+    erb :index
+  else
+    redirect "/login"
+  end
+
 end
 
 # fetch() behavior
@@ -103,7 +110,8 @@ post '/login' do
   check_hash = BCrypt::Engine.hash_secret(params[:password], salt)
   if (check_hash === user.password_hash)
     user.auth_token = SecureRandom.hex
-    response.set_cookie(user.email, user.auth_token)
+    user.save()
+    response.set_cookie("shortly", user.auth_token)
     redirect "/"
   else
     error = "The password and username do not match."
