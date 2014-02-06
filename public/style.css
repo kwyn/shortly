@@ -89,8 +89,14 @@ h1 {
   font-size: 12px;
 }
 
+.link .last_click {
+  float: right;
+  margin-right: 10px;
+}
+
 .link .info {
   margin-left: 55px;
+  min-height: 48px;
 }
 
 form {

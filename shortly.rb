@@ -62,11 +62,13 @@ get '/links' do
     links = if params[:query]
       puts params[:query]
       Link.where("url like ?", "%#{params[:query]}%")
+    elsif params[:sortBy]
+      Link.order( params[:sortBy] + " DESC" );
     else
       Link.order("visits DESC")
     end
     links.map { |link|
-        link.as_json.merge(base_url: request.base_url)
+      link.as_json.merge(base_url: request.base_url, updated_time: link.updated_at.strftime("%b %d, %Y %I:%M %p"))
     }.to_json
 end
 
