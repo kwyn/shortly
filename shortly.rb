@@ -96,6 +96,7 @@ get '/signup' do
 end
 
 get '/login' do
+  puts request.cookies
   if params[:errors]
     @error = params[:errors]
     erb :login
@@ -128,6 +129,11 @@ post '/users' do
   else
     redirect "/signup?errors=#{@user.errors.full_messages.last}"
   end
+end
+
+get '/logout' do
+  response.set_cookie("shortly", nil)
+  redirect "/login"
 end
 
 # link.save() behavior
