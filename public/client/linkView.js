@@ -3,6 +3,7 @@ Shortly.LinkView = Backbone.View.extend({
   className: 'link',
 
   template: _.template(' \
+      <a href="#" class="add"><img src="/plus-icon.png" class="add"/></a> \
       <img src="/redirect_icon.png"/> \
       <div class="info"> \
         <div class="visits"><a href="#" class="filterVisits"><span class="count"><%= visits %></span>Visits</a></div> \
@@ -14,7 +15,8 @@ Shortly.LinkView = Backbone.View.extend({
   ),
   events: {
     "click .filterTime": "filterTime",
-    "click .filterVisits": "filterVisits"
+    "click .filterVisits": "filterVisits",
+    "click .add": "addLink"
   },
   filterTime: function(e) {
     this.model.trigger("filterTime");
@@ -25,6 +27,9 @@ Shortly.LinkView = Backbone.View.extend({
   render: function() {
     this.$el.html( this.template(this.model.attributes) );
     return this;
+  },
+  addLink: function() {
+    this.model.save();
   }
 
 });

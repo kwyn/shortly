@@ -134,6 +134,11 @@ img.spinner {
   display: none;
 }
 
+img.add {
+  height: 50px;
+  width: 50px;
+}
+
 .creator .message {
   clear: both;
 }

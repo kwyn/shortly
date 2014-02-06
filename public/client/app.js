@@ -6,6 +6,8 @@ window.Shortly = Backbone.View.extend({
       <ul> \
         <li><a href="#" class="index">All Links</a></li> \
         <li><a href="#" class="addLink">Add link </a></li> \
+        <li><a href="#" class="myLinks">My Links </a></li> \
+        <li><a href="#" class="login">Log In</a></li> \
       </ul> \
       </div> \
       <form id="shorten"> \
@@ -20,9 +22,10 @@ window.Shortly = Backbone.View.extend({
 
   events: {
     "click li a.index":  "renderIndexView",
-    "click li a.create": "renderCreateView",
+    "click li a.myLinks": "renderMyLinksView",
     "submit #shorten": "shortenUrl",
     "click li a.addLink": "showLink"
+    // "click li a.login": "login"
   },
 
   initialize: function(){
@@ -42,15 +45,22 @@ window.Shortly = Backbone.View.extend({
     var linksView = new Shortly.LinksView( {collection: links} );
     this.$el.find('#container').html( linksView.render().el );
     var searchView = new Shortly.SearchView( {collection: links});
-    $('.search').show();
+    $("#shorten").hide();
+    $('.search').slideDown();
     this.$el.find('.search').html( searchView.render().el );
     this.updateNav('index');
   },
 
-  renderCreateView: function(e){
+  renderMyLinksView: function(e){
     e && e.preventDefault();
-    $(".search").hide();
-    this.updateNav('create');
+    var links = new Shortly.Links();
+    var linksView = new Shortly.MyLinksView( {collection: links} );
+    this.$el.find('#container').html( linksView.render().el );
+    // var searchView = new Shortly.SearchView( {collection: links});
+    $('.search').hide();
+    $('#shorten').hide();
+    // this.$el.find('.search').html( searchView.render().el );
+    this.updateNav('myLinks');
   },
 
   shortenUrl: function(e){
@@ -97,7 +107,16 @@ window.Shortly = Backbone.View.extend({
 
   showLink: function(e) {
     e.preventDefault();
-    $("#shorten").slideToggle();
+    $(".search").hide();
+    $("#shorten").slideDown();
   }
+
+  // login: function() {
+  //   this.user = rubyusertoken;
+  // },
+
+  // logout: function() {
+  //   this.user = null;
+  // }
 
 });

@@ -39,7 +39,7 @@ ActiveRecord::Base.include_root_in_json = false
 
 class Link < ActiveRecord::Base
     has_many :clicks
-
+    has_and_belongs_to_many :users
     validates :url, presence: true
 
     before_save do |record|
@@ -54,6 +54,7 @@ end
 
 class User < ActiveRecord::Base
   validates :email, :presence => true, :uniqueness => true
+  has_and_belongs_to_many :links
 end
 
 ###########################################################
@@ -61,10 +62,11 @@ end
 ###########################################################
 
 get '/' do
-
   token = request.cookies["shortly"]
-  if User.find_by_auth_token(token)
+  user = User.find_by_auth_token(token)
+  if user
     erb :index
+    # user.to_json
   else
     redirect "/login"
   end
@@ -73,17 +75,38 @@ end
 
 # fetch() behavior
 get '/links' do
-    links = if params[:query]
-      puts params[:query]
-      Link.where("url like ?", "%#{params[:query]}%")
-    elsif params[:sortBy]
-      Link.order( params[:sortBy] + " DESC" );
-    else
-      Link.order("visits DESC")
-    end
-    links.map { |link|
-      link.as_json.merge(base_url: request.base_url, updated_time: link.updated_at.strftime("%b %d, %Y %I:%M %p"))
-    }.to_json
+  links = if params[:query]
+    puts params[:query]
+    Link.where("url like ?", "%#{params[:query]}%")
+  elsif params[:sortBy]
+    Link.order( params[:sortBy] + " DESC" );
+  elsif params[:myLinks]
+    token = request.cookies["shortly"]
+    User.find_by_auth_token(token).links
+  else
+    Link.order("visits DESC")
+  end
+  links.map { |link|
+    link.as_json.merge(base_url: request.base_url, updated_time: link.updated_at.strftime("%b %d, %Y %I:%M %p"))
+  }.to_json
+end
+
+# link.save() behavior
+post '/links' do
+  data = JSON.parse request.body.read
+  uri = URI(data['url'])
+  raise Sinatra::NotFound unless uri.absolute?
+  link = Link.find_by_url(uri.to_s) ||
+         Link.create( url: uri.to_s, title: get_url_title(uri) )
+  link.as_json.merge(base_url: request.base_url, updated_time: link.updated_at.strftime("%b %d, %Y %I:%M %p")).to_json
+end
+
+put '/links/:id' do
+  token = request.cookies["shortly"]
+  user = User.find_by_auth_token(token)
+
+  user.links <<  Link.find_by_id(params[:id])
+  user.links.to_json
 end
 
 get '/signup' do
@@ -134,16 +157,6 @@ end
 get '/logout' do
   response.set_cookie("shortly", nil)
   redirect "/login"
-end
-
-# link.save() behavior
-post '/links' do
-    data = JSON.parse request.body.read
-    uri = URI(data['url'])
-    raise Sinatra::NotFound unless uri.absolute?
-    link = Link.find_by_url(uri.to_s) ||
-           Link.create( url: uri.to_s, title: get_url_title(uri) )
-    link.as_json.merge(base_url: request.base_url, updated_time: link.updated_at.strftime("%b %d, %Y %I:%M %p")).to_json
 end
 
 get '/:url' do
