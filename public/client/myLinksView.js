@@ -13,6 +13,7 @@ Shortly.MyLinksView = Backbone.View.extend({
   addAll: function(){
     console.log("Adding all!");
     this.collection.forEach(this.addOne, this);
+    $(".add").remove();
   },
 
   addOne: function(item){

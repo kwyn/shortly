@@ -7,7 +7,7 @@ window.Shortly = Backbone.View.extend({
         <li><a href="#" class="index">All Links</a></li> \
         <li><a href="#" class="addLink">Add link </a></li> \
         <li><a href="#" class="myLinks">My Links </a></li> \
-        <li><a href="#" class="login">Log In</a></li> \
+        <li><a href="/logout" class="logout">Log Out</a></li> \
       </ul> \
       </div> \
       <form id="shorten"> \
@@ -98,23 +98,25 @@ window.Shortly = Backbone.View.extend({
     $('.message').html("").removeClass('error');
   },
 
-  updateNav: function(className){
-    this.$el.find('.navigation li a')
-            .removeClass('selected')
-            .filter('.'+className)
-            .addClass('selected');
-  },
-
   showLink: function(e) {
     e.preventDefault();
     $("#container").empty();
     $(".search").hide();
     $("#shorten").slideDown();
+    this.updateNav('addLink');
+  },
+
+  updateNav: function(className){
+    this.$el.find('.navigation li a')
+            .removeClass('selected')
+            .filter('.'+className)
+            .addClass('selected');
   }
 
   // login: function() {
-  //   this.user = rubyusertoken;
-  // },
+  //   $(".login").remove();
+  //   $(".nav").append("<li><a href='/logout' class='logout'>Log Out</a></li>");
+  // }
 
   // logout: function() {
   //   this.user = null;
