@@ -24,7 +24,8 @@ window.Shortly = Backbone.View.extend({
     "click li a.index":  "renderIndexView",
     "click li a.myLinks": "renderMyLinksView",
     "submit #shorten": "shortenUrl",
-    "click li a.addLink": "showLink"
+    "click li a.addLink": "showLink",
+    "click a.seeClicks": "seeClicks"
     // "click li a.login": "login"
   },
 
@@ -56,10 +57,8 @@ window.Shortly = Backbone.View.extend({
     var links = new Shortly.Links();
     var linksView = new Shortly.MyLinksView( {collection: links} );
     this.$el.find('#container').html( linksView.render() );
-    // var searchView = new Shortly.SearchView( {collection: links});
     $('.search').hide();
     $('#shorten').hide();
-    // this.$el.find('.search').html( searchView.render().el );
     this.updateNav('myLinks');
   },
 
@@ -106,12 +105,21 @@ window.Shortly = Backbone.View.extend({
     this.updateNav('addLink');
   },
 
+  seeClicks: function(e) {
+    e.preventDefault();
+    link_id = e.toElement.dataset['link'];
+    var clicks = new Shortly.Clicks();
+    var clicksView = new Shortly.ClicksView({ id: link_id, collection: clicks});
+  },
+
   updateNav: function(className){
     this.$el.find('.navigation li a')
             .removeClass('selected')
             .filter('.'+className)
             .addClass('selected');
   }
+
+
 
   // login: function() {
   //   $(".login").remove();

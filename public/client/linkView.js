@@ -11,6 +11,7 @@ Shortly.LinkView = Backbone.View.extend({
         <div class="original"><%= url %></div> \
         <a href="<%= base_url %>/<%= code %>"><%= base_url %>/<%= code %></a> \
         <div class="last_click"><a href="#" class="filterTime"><%= updated_time %></a></div>\
+        <div><a href="#" class="seeClicks" data-link="<%= id %>">See history</a></div> \
       </div>'
   ),
   events: {
@@ -32,5 +33,4 @@ Shortly.LinkView = Backbone.View.extend({
     this.model.save();
     this.model.trigger("linkAdd");
   }
-
 });

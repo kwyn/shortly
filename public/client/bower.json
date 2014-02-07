@@ -1,0 +1,20 @@
+{
+  "name": "2014-01-shortly",
+  "version": "0.0.0",
+  "homepage": "https://github.com/kaybomv/2014-01-shortly",
+  "authors": [
+    "Hack Reactor Students <github@hackreactor.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "nvd3": "git://github.com/novus/nvd3.git#~1.1.15-beta"
+  }
+}

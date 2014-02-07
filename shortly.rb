@@ -131,7 +131,6 @@ get '/signup' do
 end
 
 get '/login' do
-  puts request.cookies
   if params[:errors]
     @error = params[:errors]
     erb :login
@@ -171,12 +170,17 @@ get '/logout' do
   redirect "/login"
 end
 
+get '/clicks' do
+  Link.find_by_id(params[:id]).clicks.to_json
+end
+
 get '/:url' do
     link = Link.find_by_code params[:url]
     raise Sinatra::NotFound if link.nil?
     link.clicks.create!
     redirect link.url
 end
+
 
 ###########################################################
 # Utility
