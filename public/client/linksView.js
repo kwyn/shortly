@@ -4,6 +4,7 @@ Shortly.LinksView = Backbone.View.extend({
 
   initialize: function(){
     this.collection.on('sync', this.addAll, this);
+    this.collection.on("linkAdd", this.render, this);
     this.collection.on('filter', this.render, this);
     this.collection.on('filterTime', this.filterTime, this);
     this.collection.on('filterVisits', this.filterVisits, this);
@@ -22,6 +23,7 @@ Shortly.LinksView = Backbone.View.extend({
     return this;
   },
   addAll: function(){
+    console.log("added all");
     this.collection.forEach(this.addOne, this);
   },
 

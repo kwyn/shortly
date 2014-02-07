@@ -39,7 +39,8 @@ ActiveRecord::Base.include_root_in_json = false
 
 class Link < ActiveRecord::Base
     has_many :clicks
-    has_and_belongs_to_many :users
+    has_many :link_users
+    has_many :users, :through => :link_users
     validates :url, presence: true
 
     before_save do |record|
@@ -54,8 +55,18 @@ end
 
 class User < ActiveRecord::Base
   validates :email, :presence => true, :uniqueness => true
-  has_and_belongs_to_many :links
+
+  has_many :link_users
+  has_many :links, :through => :link_users
 end
+
+class LinkUser < ActiveRecord::Base
+  belongs_to :link
+  belongs_to :user
+
+  validates_uniqueness_of :link_id, :scope => :user_id
+end
+
 
 ###########################################################
 # Routes
@@ -106,6 +117,7 @@ put '/links/:id' do
   user = User.find_by_auth_token(token)
 
   user.links <<  Link.find_by_id(params[:id])
+  puts user.links
   user.links.to_json
 end
 

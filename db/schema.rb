@@ -18,6 +18,11 @@ ActiveRecord::Schema.define(version: 20140206194731) do
     t.datetime "updated_at"
   end
 
+  create_table "link_users", force: true do |t|
+    t.integer "link_id"
+    t.integer "user_id"
+  end
+
   create_table "links", force: true do |t|
     t.string   "url"
     t.string   "code"
@@ -25,11 +30,6 @@ ActiveRecord::Schema.define(version: 20140206194731) do
     t.datetime "updated_at"
     t.integer  "visits",     default: 0
     t.string   "title"
-  end
-
-  create_table "links_users", force: true do |t|
-    t.integer "link_id"
-    t.integer "user_id"
   end
 
   create_table "users", force: true do |t|

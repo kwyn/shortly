@@ -55,7 +55,7 @@ window.Shortly = Backbone.View.extend({
     e && e.preventDefault();
     var links = new Shortly.Links();
     var linksView = new Shortly.MyLinksView( {collection: links} );
-    this.$el.find('#container').html( linksView.render().el );
+    this.$el.find('#container').html( linksView.render() );
     // var searchView = new Shortly.SearchView( {collection: links});
     $('.search').hide();
     $('#shorten').hide();
@@ -107,6 +107,7 @@ window.Shortly = Backbone.View.extend({
 
   showLink: function(e) {
     e.preventDefault();
+    $("#container").empty();
     $(".search").hide();
     $("#shorten").slideDown();
   }

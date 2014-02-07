@@ -3,7 +3,7 @@ Shortly.LinkView = Backbone.View.extend({
   className: 'link',
 
   template: _.template(' \
-      <a href="#" class="add"><img src="/plus-icon.png" class="add"/></a> \
+      <a href="#" class="add"><img src="/plus-icon.png" class="plus"/></a> \
       <img src="/redirect_icon.png"/> \
       <div class="info"> \
         <div class="visits"><a href="#" class="filterVisits"><span class="count"><%= visits %></span>Visits</a></div> \
@@ -30,6 +30,7 @@ Shortly.LinkView = Backbone.View.extend({
   },
   addLink: function() {
     this.model.save();
+    this.model.trigger("linkAdd");
   }
 
 });
